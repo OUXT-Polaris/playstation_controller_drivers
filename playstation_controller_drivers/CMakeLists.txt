@@ -41,6 +41,9 @@ ament_target_dependencies(
 # which is appropriate when building the dll but not consuming it.
 target_compile_definitions(dualsense_driver_component PRIVATE "PLAYSTATION_CONTROLLER_DRIVERS_BUILDING_LIBRARY")
 
+rclcpp_components_register_nodes(dualsense_driver_component
+  "playstation_controller_drivers::DualsenseDriverComponent")
+
 install(
   DIRECTORY include/
   DESTINATION include

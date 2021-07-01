@@ -1,6 +1,7 @@
 #include <playstation_controller_drivers/dualsense_driver_component.hpp>
 #include <playstation_controller_drivers/util.hpp>
 #include <color_names/color_names.hpp>
+#include <rclcpp_components/register_node_macro.hpp>
 
 namespace playstation_controller_drivers
 {
@@ -102,3 +103,5 @@ void DualsenseDriverComponent::timerCallback()
 }
 
 }  // namespace playstation_controller_drivers
+
+RCLCPP_COMPONENTS_REGISTER_NODE(playstation_controller_drivers::DualsenseDriverComponent)

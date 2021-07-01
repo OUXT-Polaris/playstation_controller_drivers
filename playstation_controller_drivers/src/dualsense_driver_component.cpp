@@ -15,6 +15,7 @@ DualsenseDriverComponent::DualsenseDriverComponent(const rclcpp::NodeOptions & o
   color_string_sub_ = this->create_subscription<std_msgs::msg::String>(
     "~/color/name", 1,
     std::bind(&DualsenseDriverComponent::colorNameCallback, this, std::placeholders::_1));
+  joy_pub_ = this->create_publisher<sensor_msgs::msg::Joy>("joy", 1);
   using namespace std::chrono_literals;
   timer_ = this->create_wall_timer(10ms, std::bind(&DualsenseDriverComponent::timerCallback, this));
   input_thread_ = std::thread(&DualsenseDriverComponent::getInput, this);
@@ -62,6 +63,7 @@ void DualsenseDriverComponent::getInput()
       } else if (e.type == SDL_CONTROLLERBUTTONDOWN) {
         handleJoyButtonDown(e);
       } else if (e.type == SDL_CONTROLLERBUTTONUP) {
+        handleJoyButtonUp(e);
       }
     }
   }
@@ -99,6 +101,17 @@ void DualsenseDriverComponent::timerCallback()
       buttons_[SDL_CONTROLLER_BUTTON_DPAD_LEFT] = false;
       buttons_[SDL_CONTROLLER_BUTTON_DPAD_RIGHT] = false;
     }
+  }
+  else
+  {
+    sensor_msgs::msg::Joy joy;
+    joy.header.frame_id = "joy";
+    joy.header.stamp = get_clock()->now();
+    for(const auto & button : buttons_)
+    {
+      joy.buttons.emplace_back(button.second);
+    }
+    joy_pub_->publish(joy);
   }
 }
 

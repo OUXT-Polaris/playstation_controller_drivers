@@ -96,6 +96,7 @@ void DualsenseDriverComponent::timerCallback()
       buttons_[SDL_CONTROLLER_BUTTON_Y] = false;
       buttons_[SDL_CONTROLLER_BUTTON_BACK] = false;
       buttons_[SDL_CONTROLLER_BUTTON_GUIDE] = false;
+      buttons_[SDL_CONTROLLER_BUTTON_START] = false;
       buttons_[SDL_CONTROLLER_BUTTON_DPAD_UP] = false;
       buttons_[SDL_CONTROLLER_BUTTON_DPAD_DOWN] = false;
       buttons_[SDL_CONTROLLER_BUTTON_DPAD_LEFT] = false;
@@ -107,9 +108,50 @@ void DualsenseDriverComponent::timerCallback()
     sensor_msgs::msg::Joy joy;
     joy.header.frame_id = "joy";
     joy.header.stamp = get_clock()->now();
+    joy.buttons = std::vector<int>(buttons_.size());
     for(const auto & button : buttons_)
     {
+      switch (button.first)
+      {
+      case SDL_CONTROLLER_BUTTON_A:
+        joy.buttons[1] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_B:
+        joy.buttons[3] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_X:
+        joy.buttons[2] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_Y:
+        joy.buttons[0] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_DPAD_UP:
+        joy.buttons[4] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+        joy.buttons[5] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+        joy.buttons[6] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+        joy.buttons[7] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_BACK:
+        joy.buttons[8] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_GUIDE:
+        joy.buttons[10] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_START:
+        joy.buttons[9] = button.second;
+        break;
+      default:
+        break;
+      }
+      /*
       joy.buttons.emplace_back(button.second);
+      */
     }
     joy_pub_->publish(joy);
   }

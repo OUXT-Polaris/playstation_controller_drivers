@@ -101,6 +101,10 @@ void DualsenseDriverComponent::timerCallback()
       buttons_[SDL_CONTROLLER_BUTTON_DPAD_DOWN] = false;
       buttons_[SDL_CONTROLLER_BUTTON_DPAD_LEFT] = false;
       buttons_[SDL_CONTROLLER_BUTTON_DPAD_RIGHT] = false;
+      buttons_[SDL_CONTROLLER_BUTTON_LEFTSTICK] = false;
+      buttons_[SDL_CONTROLLER_BUTTON_RIGHTSTICK] = false;
+      buttons_[SDL_CONTROLLER_BUTTON_LEFTSHOULDER] = false;
+      buttons_[SDL_CONTROLLER_BUTTON_RIGHTSHOULDER] = false;
     }
   }
   else
@@ -145,6 +149,18 @@ void DualsenseDriverComponent::timerCallback()
         break;
       case SDL_CONTROLLER_BUTTON_START:
         joy.buttons[9] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_LEFTSTICK:
+        joy.buttons[11] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_RIGHTSTICK:
+        joy.buttons[12] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+        joy.buttons[13] = button.second;
+        break;
+      case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+        joy.buttons[14] = button.second;
         break;
       default:
         break;

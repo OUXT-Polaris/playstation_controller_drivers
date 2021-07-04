@@ -9,6 +9,8 @@ namespace playstation_controller_drivers
 DualsenseDriverComponent::DualsenseDriverComponent(const rclcpp::NodeOptions & options)
 : Node("dualsense_driver", options)
 {
+  declare_parameter("deadzone", 0.1);
+  get_parameter("deadzone", deadzone_);
   color_sub_ = this->create_subscription<std_msgs::msg::ColorRGBA>(
     "~/color", 1,
     std::bind(&DualsenseDriverComponent::colorCallback, this, std::placeholders::_1));
@@ -67,7 +69,11 @@ double DualsenseDriverComponent::normalizeUint16Value(int16_t value) const
 {
   constexpr int16_t max = std::numeric_limits<int16_t>::max();
   constexpr int16_t min = std::numeric_limits<int16_t>::min();
-  return (static_cast<double>(value - min) / static_cast<double>(max - min) - 0.5) * 2;
+  double raw_value = (static_cast<double>(value - min) / static_cast<double>(max - min) - 0.5) * -2;
+  if(deadzone_ >= std::fabs(raw_value)) {
+    raw_value = 0;
+  }
+  return raw_value ;
 }
 
 void DualsenseDriverComponent::getInput()

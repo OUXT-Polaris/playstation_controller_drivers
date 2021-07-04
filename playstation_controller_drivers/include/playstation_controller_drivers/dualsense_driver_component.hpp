@@ -39,6 +39,7 @@ private:
   int device_id_{0};
   void getInput();
   std::thread input_thread_;
+  double deadzone_;
   double normalizeUint16Value(int16_t value) const;
 };
 

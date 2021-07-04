@@ -10,6 +10,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_gamecontroller.h>
 #include <unordered_map>
+#include <limits>
 
 namespace playstation_controller_drivers
 {
@@ -26,16 +27,19 @@ private:
   void colorNameCallback(const std_msgs::msg::String::SharedPtr msg);
   void handleJoyButtonDown(const SDL_Event & e);
   void handleJoyButtonUp(const SDL_Event & e);
+  void handleJoyAxis(const SDL_Event & e);
   rclcpp::Publisher<sensor_msgs::msg::Joy>::SharedPtr joy_pub_;
   rclcpp::Subscription<std_msgs::msg::ColorRGBA>::SharedPtr color_sub_;
   rclcpp::Subscription<std_msgs::msg::String>::SharedPtr color_string_sub_;
   sensor_msgs::msg::Joy joy_;
   std::unordered_map<uint8_t, bool> buttons_;
+  std::unordered_map<uint8_t, double> axis_;
   rclcpp::TimerBase::SharedPtr timer_;
   SDL_GameController * controller_{nullptr};
   int device_id_{0};
   void getInput();
   std::thread input_thread_;
+  double normalizeUint16Value(int16_t value) const;
 };
 
 }  // namespace playstation_controller_drivers

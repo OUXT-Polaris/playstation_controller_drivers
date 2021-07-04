@@ -53,13 +53,31 @@ void DualsenseDriverComponent::handleJoyButtonUp(const SDL_Event & e)
   buttons_[e.jbutton.button] = false;
 }
 
+void DualsenseDriverComponent::handleJoyAxis(const SDL_Event & e)
+{
+  const auto it = axis_.find(e.jaxis.axis);
+  if (it == axis_.end()) {
+    RCLCPP_ERROR_STREAM(get_logger(), "Unregisterd button was pressed.");
+    return;
+  }
+  axis_[e.jaxis.axis] = normalizeUint16Value(e.jaxis.value);
+}
+
+double DualsenseDriverComponent::normalizeUint16Value(int16_t value) const
+{
+  constexpr int16_t max = std::numeric_limits<int16_t>::max();
+  constexpr int16_t min = std::numeric_limits<int16_t>::min();
+  return (static_cast<double>(value - min) / static_cast<double>(max - min) - 0.5) * 2;
+}
+
 void DualsenseDriverComponent::getInput()
 {
   while (rclcpp::ok()) {
     if (controller_ != nullptr) {
       SDL_Event e;
       SDL_WaitEventTimeout(&e, 10);
-      if (e.type == SDL_JOYAXISMOTION) {
+      if (e.type == SDL_CONTROLLERAXISMOTION) {
+        handleJoyAxis(e);
       } else if (e.type == SDL_CONTROLLERBUTTONDOWN) {
         handleJoyButtonDown(e);
       } else if (e.type == SDL_CONTROLLERBUTTONUP) {
@@ -105,69 +123,85 @@ void DualsenseDriverComponent::timerCallback()
       buttons_[SDL_CONTROLLER_BUTTON_RIGHTSTICK] = false;
       buttons_[SDL_CONTROLLER_BUTTON_LEFTSHOULDER] = false;
       buttons_[SDL_CONTROLLER_BUTTON_RIGHTSHOULDER] = false;
+      axis_[SDL_CONTROLLER_AXIS_LEFTX] = 0;
+      axis_[SDL_CONTROLLER_AXIS_LEFTY] = 0;
+      axis_[SDL_CONTROLLER_AXIS_RIGHTX] = 0;
+      axis_[SDL_CONTROLLER_AXIS_RIGHTY] = 0;
     }
-  }
-  else
-  {
+  } else {
     sensor_msgs::msg::Joy joy;
     joy.header.frame_id = "joy";
     joy.header.stamp = get_clock()->now();
     joy.buttons = std::vector<int>(buttons_.size());
-    for(const auto & button : buttons_)
-    {
-      switch (button.first)
-      {
-      case SDL_CONTROLLER_BUTTON_A:
-        joy.buttons[1] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_B:
-        joy.buttons[3] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_X:
-        joy.buttons[2] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_Y:
-        joy.buttons[0] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_DPAD_UP:
-        joy.buttons[4] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
-        joy.buttons[5] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
-        joy.buttons[6] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
-        joy.buttons[7] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_BACK:
-        joy.buttons[8] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_GUIDE:
-        joy.buttons[10] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_START:
-        joy.buttons[9] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_LEFTSTICK:
-        joy.buttons[11] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_RIGHTSTICK:
-        joy.buttons[12] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
-        joy.buttons[13] = button.second;
-        break;
-      case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
-        joy.buttons[14] = button.second;
-        break;
-      default:
-        break;
+    joy.axes = std::vector<float>(axis_.size());
+    for (const auto & button : buttons_) {
+      switch (button.first) {
+        case SDL_CONTROLLER_BUTTON_A:
+          joy.buttons[1] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_B:
+          joy.buttons[3] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_X:
+          joy.buttons[2] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_Y:
+          joy.buttons[0] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_DPAD_UP:
+          joy.buttons[4] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_DPAD_DOWN:
+          joy.buttons[5] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_DPAD_LEFT:
+          joy.buttons[6] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_DPAD_RIGHT:
+          joy.buttons[7] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_BACK:
+          joy.buttons[8] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_GUIDE:
+          joy.buttons[10] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_START:
+          joy.buttons[9] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_LEFTSTICK:
+          joy.buttons[11] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_RIGHTSTICK:
+          joy.buttons[12] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_LEFTSHOULDER:
+          joy.buttons[13] = button.second;
+          break;
+        case SDL_CONTROLLER_BUTTON_RIGHTSHOULDER:
+          joy.buttons[14] = button.second;
+          break;
+        default:
+          break;
       }
-      /*
-      joy.buttons.emplace_back(button.second);
-      */
+    }
+    for (const auto & axis : axis_) {
+      switch (axis.first) {
+        case SDL_CONTROLLER_AXIS_LEFTX:
+          joy.axes[0] = axis.second;
+          break;
+        case SDL_CONTROLLER_AXIS_LEFTY:
+          joy.axes[1] = axis.second;
+          break;
+        case SDL_CONTROLLER_AXIS_RIGHTX:
+          joy.axes[2] = axis.second;
+          break;
+        case SDL_CONTROLLER_AXIS_RIGHTY:
+          joy.axes[3] = axis.second;
+          break;
+        default:
+          break;
+      }
     }
     joy_pub_->publish(joy);
   }

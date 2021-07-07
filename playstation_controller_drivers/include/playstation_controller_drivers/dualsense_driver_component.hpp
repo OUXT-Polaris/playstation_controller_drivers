@@ -15,16 +15,19 @@
 #ifndef PLAYSTATION_CONTROLLER_DRIVERS__DUALSENSE_DRIVER_COMPONENT_HPP_
 #define PLAYSTATION_CONTROLLER_DRIVERS__DUALSENSE_DRIVER_COMPONENT_HPP_
 
-#include "playstation_controller_drivers/visibility_control.h"
-
 #include <rclcpp/rclcpp.hpp>
 #include <sensor_msgs/msg/joy.hpp>
 #include <std_msgs/msg/color_rgba.hpp>
 #include <std_msgs/msg/string.hpp>
+
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_gamecontroller.h>
+#include <playstation_controller_drivers/visibility_control.h>
+
 #include <unordered_map>
 #include <limits>
+#include <memory>
+
 
 namespace playstation_controller_drivers
 {

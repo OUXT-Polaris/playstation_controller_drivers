@@ -16,6 +16,9 @@
 #include <playstation_controller_drivers/util.hpp>
 #include <color_names/color_names.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
+#include <memory>
+#include <vector>
+#include <limits>
 
 namespace playstation_controller_drivers
 {

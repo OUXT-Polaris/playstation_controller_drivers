@@ -14,6 +14,7 @@
 
 #include <rclcpp/rclcpp.hpp>
 #include <playstation_controller_drivers/dualsense_driver_component.hpp>
+#include <memory>
 
 int main(int argc, char ** argv)
 {

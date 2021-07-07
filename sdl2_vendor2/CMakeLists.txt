@@ -42,7 +42,6 @@ ExternalProject_Add(SDL2-2.0.14
     -DSDL_DLOPEN=ON   # On, dependency of joystick
     -DSDL_SENSOR=ON   # On, dependency of joystick
     -DHIDAPI=ON
-    -DSDL_JOYSTICK_HIDAPI=ON
   INSTALL_DIR "${CMAKE_CURRENT_BINARY_DIR}/SDL2"
   PATCH_COMMAND
     ${CMAKE_COMMAND} -E chdir <SOURCE_DIR> git apply -p1 --ignore-space-change --whitespace=nowarn ${CMAKE_CURRENT_SOURCE_DIR}/sdl2-windows-add-vcruntime.patch

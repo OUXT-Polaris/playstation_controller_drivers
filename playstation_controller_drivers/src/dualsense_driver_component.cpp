@@ -1,7 +1,24 @@
+// Copyright (c) 2021 OUXT Polaris
+//
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+//
+//     http://www.apache.org/licenses/LICENSE-2.0
+//
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
 #include <playstation_controller_drivers/dualsense_driver_component.hpp>
 #include <playstation_controller_drivers/util.hpp>
 #include <color_names/color_names.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
+#include <memory>
+#include <vector>
+#include <limits>
 
 namespace playstation_controller_drivers
 {
@@ -70,10 +87,10 @@ double DualsenseDriverComponent::normalizeUint16Value(int16_t value) const
   constexpr int16_t max = std::numeric_limits<int16_t>::max();
   constexpr int16_t min = std::numeric_limits<int16_t>::min();
   double raw_value = (static_cast<double>(value - min) / static_cast<double>(max - min) - 0.5) * -2;
-  if(deadzone_ >= std::fabs(raw_value)) {
+  if (deadzone_ >= std::fabs(raw_value)) {
     raw_value = 0;
   }
-  return raw_value ;
+  return raw_value;
 }
 
 void DualsenseDriverComponent::getInput()
@@ -133,6 +150,8 @@ void DualsenseDriverComponent::timerCallback()
       axis_[SDL_CONTROLLER_AXIS_LEFTY] = 0;
       axis_[SDL_CONTROLLER_AXIS_RIGHTX] = 0;
       axis_[SDL_CONTROLLER_AXIS_RIGHTY] = 0;
+      axis_[SDL_CONTROLLER_AXIS_TRIGGERLEFT] = 0;
+      axis_[SDL_CONTROLLER_AXIS_TRIGGERRIGHT] = 0;
     }
   } else {
     sensor_msgs::msg::Joy joy;
@@ -204,6 +223,12 @@ void DualsenseDriverComponent::timerCallback()
           break;
         case SDL_CONTROLLER_AXIS_RIGHTY:
           joy.axes[3] = axis.second;
+          break;
+        case SDL_CONTROLLER_AXIS_TRIGGERLEFT:
+          joy.axes[4] = axis.second * -1;
+          break;
+        case SDL_CONTROLLER_AXIS_TRIGGERRIGHT:
+          joy.axes[5] = axis.second * -1;
           break;
         default:
           break;

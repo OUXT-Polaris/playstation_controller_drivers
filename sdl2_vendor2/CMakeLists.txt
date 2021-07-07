@@ -57,5 +57,5 @@ ament_export_include_directories(include)
 ament_export_libraries(SDL2)
 
 ament_package(
-  CONFIG_EXTRAS "sdl2_vendor-extras.cmake"
+  CONFIG_EXTRAS "sdl2_vendor2-extras.cmake"
 )

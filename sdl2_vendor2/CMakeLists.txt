@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.5)
-project(sdl2_vendor)
+project(sdl2_vendor2)
 
 option(FORCE_BUILD_VENDOR_PKG
   "Build SDL2 from source, even if system-installed package is available"
@@ -31,6 +31,7 @@ ExternalProject_Add(SDL2-2.0.14
     -DSDL_EVENTS=ON    # On, dependency of joystick
     -DSDL_JOYSTICK=ON  # On, we are using this
     -DSDL_HAPTIC=ON    # On, we are using this
+    -DSDL_FRAMEWORK_GAMECONTROLLER=ON
     -DSDL_POWER=ON     # On, dependency of joystick
     -DSDL_THREADS=OFF
     -DSDL_TIMERS=ON    # On, we need timers to work

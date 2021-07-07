@@ -21,7 +21,7 @@ find_package(ament_cmake_ros REQUIRED)
 find_package(color_names REQUIRED)
 find_package(rclcpp REQUIRED)
 find_package(rclcpp_components REQUIRED)
-find_package(sdl2_vendor REQUIRED)
+find_package(sdl2_vendor2 REQUIRED)
 find_package(sensor_msgs REQUIRED)
 
 add_library(dualsense_driver_component src/dualsense_driver_component.cpp)
@@ -32,7 +32,7 @@ ament_target_dependencies(
   dualsense_driver_component
   "rclcpp"
   "rclcpp_components"
-  "sdl2_vendor"
+  "sdl2_vendor2"
   "sensor_msgs"
   "color_names"
 )

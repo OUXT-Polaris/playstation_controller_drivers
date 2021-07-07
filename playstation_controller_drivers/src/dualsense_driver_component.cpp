@@ -84,10 +84,10 @@ double DualsenseDriverComponent::normalizeUint16Value(int16_t value) const
   constexpr int16_t max = std::numeric_limits<int16_t>::max();
   constexpr int16_t min = std::numeric_limits<int16_t>::min();
   double raw_value = (static_cast<double>(value - min) / static_cast<double>(max - min) - 0.5) * -2;
-  if(deadzone_ >= std::fabs(raw_value)) {
+  if (deadzone_ >= std::fabs(raw_value)) {
     raw_value = 0;
   }
-  return raw_value ;
+  return raw_value;
 }
 
 void DualsenseDriverComponent::getInput()

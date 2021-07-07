@@ -1,0 +1,5 @@
+repositories:
+  tcp_sender:
+    type: git
+    url: https://github.com/OUXT-Polaris/color_names.git
+    version: master

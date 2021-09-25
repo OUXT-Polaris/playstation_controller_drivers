@@ -14,8 +14,8 @@ endif()
 
 include(ExternalProject)
 ExternalProject_Add(SDL2-2.0.14
-  PREFIX SDL2-2.0.12
-  URL https://www.libsdl.org/release/SDL2-2.0.14.tar.gz
+  PREFIX SDL2-2.0.14
+  URL https://github.com/libsdl-org/SDL/archive/refs/tags/release-2.0.14.tar.gz
   URL_MD5 76ed4e6da9c07bd168b2acd9bfefab1b
   CMAKE_ARGS
     -DBUILD_SHARED_LIBS=ON

@@ -13,9 +13,10 @@ if(NOT FORCE_BUILD_VENDOR_PKG)
 endif()
 
 include(ExternalProject)
-ExternalProject_Add(SDL2-2.0.14
-  PREFIX SDL2-2.0.14
-  URL https://github.com/libsdl-org/SDL/archive/refs/tags/release-2.0.14.tar.gz
+ExternalProject_Add(SDL2-2.0.22
+  PREFIX SDL2-2.0.22
+  URL https://www.libsdl.org/release/SDL2-2.0.22.tar.gz
+  URL_MD5 40aedb499cb2b6f106d909d9d97f869a
   CMAKE_ARGS
     -DBUILD_SHARED_LIBS=ON
     -DCMAKE_BUILD_TYPE=Release

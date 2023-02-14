@@ -12,16 +12,16 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-#include <rclcpp/rclcpp.hpp>
-#include <playstation_controller_drivers/dualsense_driver_component.hpp>
 #include <memory>
+#include <playstation_controller_drivers/dualsense_driver_component.hpp>
+#include <rclcpp/rclcpp.hpp>
 
 int main(int argc, char ** argv)
 {
   rclcpp::init(argc, argv);
   rclcpp::NodeOptions options;
-  auto component = std::make_shared<playstation_controller_drivers::DualsenseDriverComponent>(
-    options);
+  auto component =
+    std::make_shared<playstation_controller_drivers::DualsenseDriverComponent>(options);
   rclcpp::spin(component);
   rclcpp::shutdown();
   return 0;

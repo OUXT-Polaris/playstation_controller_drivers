@@ -12,13 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+#include <color_names/color_names.hpp>
+#include <limits>
+#include <memory>
 #include <playstation_controller_drivers/dualsense_driver_component.hpp>
 #include <playstation_controller_drivers/util.hpp>
-#include <color_names/color_names.hpp>
 #include <rclcpp_components/register_node_macro.hpp>
-#include <memory>
 #include <vector>
-#include <limits>
 
 namespace playstation_controller_drivers
 {
@@ -29,8 +29,7 @@ DualsenseDriverComponent::DualsenseDriverComponent(const rclcpp::NodeOptions & o
   declare_parameter("deadzone", 0.1);
   get_parameter("deadzone", deadzone_);
   color_sub_ = this->create_subscription<std_msgs::msg::ColorRGBA>(
-    "~/color", 1,
-    std::bind(&DualsenseDriverComponent::colorCallback, this, std::placeholders::_1));
+    "~/color", 1, std::bind(&DualsenseDriverComponent::colorCallback, this, std::placeholders::_1));
   color_string_sub_ = this->create_subscription<std_msgs::msg::String>(
     "~/color/name", 1,
     std::bind(&DualsenseDriverComponent::colorNameCallback, this, std::placeholders::_1));

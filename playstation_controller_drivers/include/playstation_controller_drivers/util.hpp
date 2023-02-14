@@ -15,10 +15,10 @@
 #ifndef PLAYSTATION_CONTROLLER_DRIVERS__UTIL_HPP_
 #define PLAYSTATION_CONTROLLER_DRIVERS__UTIL_HPP_
 
+#include <SDL2/SDL_gamecontroller.h>
+
 #include <boost/algorithm/clamp.hpp>
 #include <std_msgs/msg/color_rgba.hpp>
-
-#include <SDL2/SDL_gamecontroller.h>
 
 namespace playstation_controller_drivers
 {

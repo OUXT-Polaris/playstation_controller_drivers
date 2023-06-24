@@ -1,0 +1,10 @@
+<launch>
+    <arg name="use_sim_time" default="true"/>
+    <node pkg="playstation_controller_drivers" exec="dualsense_driver_node" name="joy">
+        <param name="use_sim_time" value="$(var use_sim_time)"/>
+    </node>
+    <node pkg="joy_teleop" exec="joy_teleop" name="joy_teleop">
+        <param from="$(find-pkg-share playstation_controller_drivers)/config/wamv_dualsense.yaml"/>
+        <param name="use_sim_time" value="$(var use_sim_time)"/>
+    </node>
+</launch>

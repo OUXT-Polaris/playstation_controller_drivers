@@ -56,6 +56,10 @@ install(
   RUNTIME DESTINATION bin
 )
 
+install(DIRECTORY launch config
+  DESTINATION share/${PROJECT_NAME}
+)
+
 add_executable(dualsense_driver_node src/dualsense_driver_node.cpp)
 target_include_directories(dualsense_driver_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

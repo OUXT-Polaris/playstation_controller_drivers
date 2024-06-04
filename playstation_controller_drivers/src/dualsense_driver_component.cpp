@@ -48,6 +48,10 @@ void DualsenseDriverComponent::colorCallback(const std_msgs::msg::ColorRGBA::Sha
 void DualsenseDriverComponent::colorNameCallback(const std_msgs::msg::String::SharedPtr msg)
 {
   const auto color = LEDColor(color_names::makeColorMsg(msg->data));
+  RCLCPP_INFO_STREAM(
+    get_logger(), "Setted led color to "
+                    << msg->data << ", it's rgb color is "
+                    << std_msgs::msg::to_yaml(color_names::makeColorMsg(msg->data), true));
   SDL_GameControllerSetLED(controller_, color.r, color.g, color.b);
 }
 
